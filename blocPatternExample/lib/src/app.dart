@@ -1,3 +1,4 @@
+import 'package:blocPatternExample/src/ui/movies_list.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
