@@ -5,7 +5,7 @@ import 'dart:convert';
 
 class MovieApiProvider {
   Client client = Client();
-  final _apiKey = '2c0d91a99ba3c0f9eff2bfac0be8848a';
+  final _apiKey = '';
 
   Future<ItemModel> fetchMovieList() async {
     print('entered');

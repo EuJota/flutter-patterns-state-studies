@@ -12,4 +12,10 @@ class MoviesBloc {
     ItemModel itemModel = await _repository.fetchAllMovies();
     _moviesFetcher.sink.add(itemModel);
   }
+
+  dispose() {
+    _moviesFetcher.close();
+  }
 }
+
+final bloc = MoviesBloc();
