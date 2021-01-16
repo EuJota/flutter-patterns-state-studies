@@ -1,13 +1,17 @@
+import 'package:blocPatternExample/src/blocs/movie_detail_bloc_provider.dart';
 import 'package:blocPatternExample/src/models/item_model.dart';
+import 'package:blocPatternExample/src/ui/movies_details.dart';
 import 'package:flutter/material.dart';
 import '../blocs/movies_bloc.dart';
 
 class MovieList extends StatefulWidget {
   @override
-  _MovieListState createState() => _MovieListState();
+  State<StatefulWidget> createState() {
+    return MovieListState();
+  }
 }
 
-class _MovieListState extends State<MovieList> {
+class MovieListState extends State<MovieList> {
   @override
   void initState() {
     super.initState();
@@ -34,9 +38,7 @@ class _MovieListState extends State<MovieList> {
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -48,10 +50,35 @@ class _MovieListState extends State<MovieList> {
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
-          return Image.network(
-            'https://image.tmdb.org/t/p/w185${snapshot.data.results[index].poster_path}',
-            fit: BoxFit.cover,
+          return GridTile(
+            child: InkResponse(
+              enableFeedback: true,
+              child: Image.network(
+                'https://image.tmdb.org/t/p/w185${snapshot.data.results[index].poster_path}',
+                fit: BoxFit.cover,
+              ),
+              onTap: () => openDetailPage(snapshot.data, index),
+            ),
           );
         });
+  }
+
+  openDetailPage(ItemModel data, int index) {
+    final page = MovieDetailBlocProvider(
+      child: MovieDetail(
+        title: data.results[index].title,
+        posterUrl: data.results[index].backdrop_path,
+        description: data.results[index].overview,
+        releaseDate: data.results[index].release_date,
+        voteAverage: data.results[index].vote_average.toString(),
+        movieId: data.results[index].id,
+      ),
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return page;
+      }),
+    );
   }
 }
